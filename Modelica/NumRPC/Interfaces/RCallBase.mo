@@ -7,7 +7,7 @@ partial block RCallBase "partial block for remote function calls over ZMQ REQ so
   parameter Real y0[nout]=zeros(nout) "initial output before first call";
 
 protected
-  outer NumRPC rpc;
+  outer NumRPC.Connection numrpcConn;
   input Boolean call "trigger for remote call";
   output Integer rcode "return code (should be 0)";
 
@@ -17,7 +17,7 @@ initial equation
 
 equation
   when call then
-    (rcode, y) = rpc.rcall(rpc.client, fcode, u, nout);
+    (rcode, y) = numrpcConn.rcall(numrpcConn.client, fcode, u, nout);
     assert(rcode==0, "Remote call sent back an unsuccessful return code");
   end when;
 
