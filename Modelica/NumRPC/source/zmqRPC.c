@@ -21,7 +21,7 @@ int send_call(void* requester, header_t* call_h_p, double* call_args) {
     
     int nargs = call_h_p->nargs;
     
-    ModelicaFormatMessage("Sending request for func %d with %d args...", call_h_p->fcode, nargs);
+    //ModelicaFormatMessage("Sending request for func %d with %d args...", call_h_p->fcode, nargs);
     
     if (nargs>0) {
         rc = zmq_send(requester, msg1, sizeof(header_t), ZMQ_SNDMORE);
@@ -76,10 +76,10 @@ int recv_header(void* requester, header_t* header_p) {
     /* Check rcode */
     int rcode = header_p->fcode;
     
-    if (rcode == -1) ModelicaError("Server error: requested function code not found");
-    if (rcode == -2) ModelicaError("Server error: wrong number of calling args");
-    if (rcode == -3) ModelicaError("Server error: arg decoding error");
-    if (rcode !=  0) ModelicaError("Server error of unknown kind");
+    if (rcode == -1) ModelicaError("NumRPC server error: requested function code not found");
+    if (rcode == -2) ModelicaError("NumRPC server error: wrong number of calling args");
+    if (rcode == -3) ModelicaError("NumRPC server error: arg decoding error");
+    if (rcode !=  0) ModelicaFormatError("NumRPC server error of unknown kind: rcode=%d", rcode);
     
     return more;
 }
@@ -99,8 +99,8 @@ void recv_args(void* requester, unsigned int nargs, double* call_args) {
 /*function exposed in Modelica*/
 
 
-/*Make the remote call. Returns the rcode (0 if success)*/
-int rcall(void *object, int fcode, double* inputs, size_t nin, double* outputs, size_t nout) {
+/* Make the remote call */
+void rcall(void *object, int fcode, double* inputs, size_t nin, double* outputs, size_t nout) {
 
     ZmqReqClient *client = (ZmqReqClient *) object;
     
@@ -114,15 +114,15 @@ int rcall(void *object, int fcode, double* inputs, size_t nin, double* outputs, 
     // get the response
     header_t head;
     int more = recv_header(client->socket, &head);
-    ModelicaFormatMessage("Response rcode %d, nargs %d. More msg parts=%d", 
-        head.fcode, head.nargs, more);
+    //ModelicaFormatMessage("Response rcode %d, nargs %d. More msg parts=%d", 
+    //    head.fcode, head.nargs, more);
     
     if (head.nargs == 0) {
-        ModelicaMessage("No args to receive.");
+    //    ModelicaMessage("No args to receive.");
     }
     
     else if (head.nargs>0 && head.nargs == nout) {
-        ModelicaMessage("Receiving args...");
+    //    ModelicaMessage("Receiving args...");
         recv_args(client->socket, head.nargs, outputs);
     }
     else if (head.nargs>0 && head.nargs != nout) {
@@ -133,8 +133,6 @@ int rcall(void *object, int fcode, double* inputs, size_t nin, double* outputs, 
     else {
         ModelicaError("Cannot receive args for unexpected reason");
     }
-
-    return head.fcode;
 }
 
 #endif

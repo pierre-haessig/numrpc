@@ -9,10 +9,9 @@ block Connection "NumRPC block which holds the client connection"
     input Integer fcode;
     input Real inputs[:];
     input Integer nout;
-    output Integer success;
     output Real outputs[nout];
     
-    external "C" success=rcall(client, fcode, inputs, size(inputs,1), outputs, nout) annotation (Include="#include \"zmqRPC.c\"",
+    external "C" rcall(client, fcode, inputs, size(inputs,1), outputs, nout) annotation (Include="#include \"zmqRPC.c\"",
       IncludeDirectory="modelica://NumRPC/source");
   end rcall;
 

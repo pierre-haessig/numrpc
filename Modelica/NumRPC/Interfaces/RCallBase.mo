@@ -9,16 +9,13 @@ partial block RCallBase "partial block for remote function calls over ZMQ REQ so
 protected
   outer NumRPC.Connection numrpcConn;
   input Boolean call "trigger for remote call";
-  output Integer rcode "return code (should be 0)";
 
 initial equation
   y = y0;
-  rcode = 0;
 
 equation
   when call then
-    (rcode, y) = numrpcConn.rcall(numrpcConn.client, fcode, u, nout);
-    assert(rcode==0, "Remote call sent back an unsuccessful return code");
+    y = numrpcConn.rcall(numrpcConn.client, fcode, u, nout);
   end when;
 
 annotation(

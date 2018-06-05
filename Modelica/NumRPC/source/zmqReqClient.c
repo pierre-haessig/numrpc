@@ -18,12 +18,18 @@ typedef struct {
 void* createZmqReqClient(char *endpoint) {
     ZmqReqClient *client = (ZmqReqClient *) malloc(sizeof(ZmqReqClient));
     if (client) {
-        ModelicaFormatMessage("Creating ZMQ REQ socket to %s...", endpoint);
+        //ModelicaFormatMessage("NumRPC: creating ZMQ REQ socket to %s...", endpoint);
         client->context = zmq_ctx_new();
         client->socket = zmq_socket(client->context, ZMQ_REQ);
         int rc = zmq_connect(client->socket, endpoint);
-        // TODO: check rc==0
-        ModelicaFormatMessage("ZMQ REQ socket to %s is open.", endpoint);
+        if (rc==0) {
+            ModelicaFormatMessage("NumRPC: ZMQ REQ socket to %s is open.", endpoint);
+        }
+        else {
+            free(client);
+            client = NULL;
+            ModelicaFormatError("NumRPC: unable to open ZMQ REQ socket to %s (zmq_connect returned %d).", endpoint, rc);
+        }
     }
     else {
         free(client);
@@ -43,7 +49,7 @@ void destroyZmqReqClient(void *object) {
     //free(client->context);
     //free(client->socket);
     free(client);
-    ModelicaFormatMessage("ZMQ REQ socket closed.");
+    ModelicaFormatMessage("NumRPC: ZMQ REQ socket closed.");
 }
 
 #endif
