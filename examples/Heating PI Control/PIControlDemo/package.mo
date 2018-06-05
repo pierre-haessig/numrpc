@@ -1,5 +1,5 @@
 package PIControlDemo "Modelica side of the Heating PI control example of NumRPC"
-
+extends Modelica.Icons.ExamplesPackage;
 
 
   annotation(

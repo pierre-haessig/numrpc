@@ -8,6 +8,8 @@ model DemoRemote "Demo using the remote controller (RPC server needed)"
     Placement(visible = true, transformation(origin = {-20, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
   Modelica.Blocks.Sources.Pulse y_set_point(amplitude = 1, offset = 4, period = 10)  annotation(
     Placement(visible = true, transformation(origin = {-70, 10}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  inner NumRPC.Connection numrpcConn annotation(
+    Placement(visible = true, transformation(origin = {-60, -70}, extent = {{-20, -10}, {20, 10}}, rotation = 0)));
 equation
   connect(y_set_point.y, control.ysp) annotation(
     Line(points = {{-59, 10}, {-54.5, 10}, {-54.5, 8}, {-44, 8}}, color = {0, 0, 127}));

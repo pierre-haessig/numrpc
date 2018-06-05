@@ -15,5 +15,6 @@ partial block ControlPartial "Abstract structure of the discrete time PI control
     Placement(visible = true, transformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   annotation(
     Diagram,
-    Icon(graphics = {Rectangle(fillColor = {255, 253, 196}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(extent = {{-80, 80}, {80, -80}}, textString = "Control"), Text(origin = {0, -70}, lineColor = {85, 87, 83}, extent = {{-90, 30}, {90, -20}}, textString = "Ts=%Ts s\nk=%k, T=%T s")}, coordinateSystem(initialScale = 0.1)));
+    Icon(graphics = {Rectangle(fillColor = {255, 253, 196}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(extent = {{-80, 80}, {80, -80}}, textString = "Control"), Text(origin = {0, -70}, lineColor = {85, 87, 83}, extent = {{-90, 30}, {90, -20}}, textString = "Ts=%Ts
+k=%k, Ti=%Ti")}, coordinateSystem(initialScale = 0.1)));
 end ControlPartial;
