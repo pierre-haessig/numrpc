@@ -4,16 +4,29 @@ block Connection "NumRPC block which holds the client connection"
   parameter String endpoint="tcp://localhost:5555" "connection endpoint of the ZMQ socket";
   output ZmqReqClient client = ZmqReqClient(endpoint);
 
-  impure function rcall "remote call over ZMQ REQ socket"
+  impure function scall "remote call over ZMQ REQ socket - with state"
     input ZmqReqClient client;
-    input Integer fcode;
+    input Integer cmd;
+    input Integer st;
+    input Real inputs[:];
+    input Integer nout;
+    output Real outputs[nout];
+    output Integer st_res;
+    
+    external "C" st_res=scall(client, cmd, st, inputs, size(inputs,1), outputs, nout) annotation (Include="#include \"zmqRPC.c\"",
+      IncludeDirectory="modelica://NumRPC/source");
+  end scall;
+  
+  impure function call "remote call over ZMQ REQ socket - without state"
+    input ZmqReqClient client;
+    input Integer cmd;
     input Real inputs[:];
     input Integer nout;
     output Real outputs[nout];
     
-    external "C" rcall(client, fcode, inputs, size(inputs,1), outputs, nout) annotation (Include="#include \"zmqRPC.c\"",
-      IncludeDirectory="modelica://NumRPC/source");
-  end rcall;
+  algorithm
+    (outputs,) := scall(client, cmd, 0, inputs, nout); /*TODO: replace 0 by SNO*/
+  end call;
 
 protected
   type ZmqReqClient "state for a ZMQ REQ client, implemented in C"

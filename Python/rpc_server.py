@@ -39,14 +39,14 @@ while True:
     print("Received request: %s" % rpc.hexfmt(*messages))
 
     # 1) Decode function code
-    fcode, nargs_h = rpc.unpack_header(messages[0])
+    cmd, st, nargs_h = rpc.unpack_header(messages[0])
 
     reply = None
     try:
-        f, nargs, nout = funcs[fcode]
-        print('  requested function: {} -> {}'.format(fcode, f))
+        f, nargs, nout = funcs[cmd]
+        print('  requested function: {} -> {}'.format(cmd, f))
     except KeyError:
-        print('  requested function code {} not in funcs table'.format(fcode))
+        print('  requested function code {} not in funcs table'.format(cmd))
         reply = rpc.pack(-1)
 
     # 2) Decode function arguments
@@ -86,7 +86,7 @@ while True:
 
     # 4) Pack the response
     if reply is None:
-        reply = rpc.pack(0, out)
+        reply = rpc.pack(0, 0, out)
 
     #  Send reply back to client
     print("  Sending reply:  %s" % rpc.hexfmt(*reply))

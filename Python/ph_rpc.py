@@ -19,7 +19,7 @@ BO_BE_SZ_STD = '>'  # Big-endian Byte order. Standard Size & no Alignment
 ALN = BO_NAT_SZ_NAT
 
 # type of the function code
-FCODE_T = "i" # int (signed)
+CODE_T = "i" # int (signed)
 
 
 def ssize(fmt):
@@ -30,8 +30,8 @@ def ssize(fmt):
     return struct.calcsize(ALN + fmt)
 
 
-def pack(fcode, args=None):
-    '''pack message with fcode + args (optional)
+def pack(cmd, st=0, args=None):
+    '''pack message with cmd, st (option), args (optional)
     
     Returns:
     (msg1, msg2): header message and payload message, if args
@@ -39,7 +39,7 @@ def pack(fcode, args=None):
     '''
     nargs = len(args) if args is not None else 0
 
-    msg1 = struct.pack(ALN + FCODE_T + "I", fcode, nargs)
+    msg1 = struct.pack(ALN + CODE_T + CODE_T + "I", cmd, st, nargs)
 
     if nargs > 0:
         msg2 = struct.pack("d"*nargs, *args)
@@ -49,9 +49,9 @@ def pack(fcode, args=None):
 
 
 def unpack_header(msg1):
-    '''unpack fcode and nargs from the header message'''
-    fcode, nargs = struct.unpack(ALN + FCODE_T + "I", msg1)
-    return fcode, nargs
+    '''unpack cmd and nargs from the header message'''
+    cmd, st, nargs = struct.unpack(ALN + CODE_T + CODE_T + "I", msg1)
+    return cmd, st, nargs
 
 
 def unpack_payload(msg2, nargs):
