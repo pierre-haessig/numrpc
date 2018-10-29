@@ -145,4 +145,31 @@ int scall(void *object, int cmd, int st, double* inputs, size_t nin, double* out
     return head.st;
 }
 
+
+int scall_no_io(void *object, int cmd, int st) {
+
+    ZmqReqClient *client = (ZmqReqClient *) object;
+    
+    // Send the call
+    header_t call_h;
+    call_h.cmd = cmd;
+    call_h.st = st;
+    call_h.nargs = 0;
+    
+    send_call(client->socket, &call_h, (double*) NULL);
+    
+    // Get the response
+    header_t head;
+    int more = recv_header(client->socket, &head);
+    //ModelicaFormatMessage("Response rcode %d, nargs %d. More msg parts=%d", 
+    //    head.cmd, head.nargs, more);
+    
+   if (head.nargs>0) {
+        ModelicaFormatError(
+            "No args expected in response, but %d advertised in header!",
+            head.nargs);
+    }
+    return head.st;
+}
+
 #endif

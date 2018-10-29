@@ -4,7 +4,8 @@ block Connection "NumRPC block which holds the client connection"
   parameter String endpoint="tcp://localhost:5555" "connection endpoint of the ZMQ socket";
   output ZmqReqClient client = ZmqReqClient(endpoint);
 
-  impure function scall "remote call over ZMQ REQ socket - with state"
+
+  impure function scall "remote call cmd(inputs), with state"
     input ZmqReqClient client;
     input Integer cmd;
     input Integer st;
@@ -17,7 +18,8 @@ block Connection "NumRPC block which holds the client connection"
       IncludeDirectory="modelica://NumRPC/source");
   end scall;
   
-  impure function call "remote call over ZMQ REQ socket - without state"
+  
+  impure function call "remote call cmd(inputs)"
     input ZmqReqClient client;
     input Integer cmd;
     input Real inputs[:];
@@ -25,10 +27,24 @@ block Connection "NumRPC block which holds the client connection"
     output Real outputs[nout];
     
   algorithm
-    (outputs,) := scall(client, cmd, 0, inputs, nout); /*TODO: replace 0 by SNO*/
+    (outputs,) := scall(client, cmd, ST0, inputs, nout);
   end call;
+  
+
+  impure function state_init "initialize state for cmd command"
+    input ZmqReqClient client;
+    input Integer cmd;
+    output Integer st;
+    
+  algorithm
+    (outputs,) := scall_no_io(client, cmd=STI, st=cmd);
+  end state_init;
+
 
 protected
+  final constant Real EMPTY = {42} "approximation of an empty Real array, which are not valid in Modelica";
+  
+  
   type ZmqReqClient "state for a ZMQ REQ client, implemented in C"
     extends ExternalObject;
     
@@ -50,6 +66,17 @@ protected
     end destructor;
   end ZmqReqClient;
   
+  
+  impure function scall_no_io "remote call cmd with state st but no inputs and outputs"
+    input ZmqReqClient client;
+    input Integer cmd;
+    input Integer st;
+    output Integer st_res;
+    
+    external "C" st_res=scall_no_io(client, cmd, st) annotation (Include="#include \"zmqRPC.c\"",
+      IncludeDirectory="modelica://NumRPC/source");
+  end scall_no_io;
+    
   annotation(
       defaultComponentName = "numrpcConn",
       defaultComponentPrefixes="inner",
