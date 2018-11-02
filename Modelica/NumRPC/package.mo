@@ -1,7 +1,7 @@
 within;
 package NumRPC "NumRPC client library for Modelica"
   extends Modelica.Icons.Package;
-  
+
   /*Reserved command ids*/
   final constant Integer SES=-1 "SEssion Start cmd";
   final constant Integer SEE=-2 "SEssion End cmd";
