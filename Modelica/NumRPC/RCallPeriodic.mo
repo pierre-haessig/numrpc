@@ -1,7 +1,7 @@
 within NumRPC;
 
 block RCallPeriodic "Periodic remote function calls over NumRPC"
-  extends Interfaces.RCallBase;
+  extends Interfaces.RCallTrigBase;
   
   parameter Modelica.SIunits.Time period(min=100*Modelica.Constants.eps) "calling period";
   parameter Modelica.SIunits.Time start(min=0)=0 "first calling instant";

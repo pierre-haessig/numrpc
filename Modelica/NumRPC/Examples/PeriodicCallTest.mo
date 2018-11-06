@@ -1,6 +1,6 @@
 within NumRPC.Examples;
 
-model PeriodicCallTest
+model PeriodicCallTest "Test of a periodic remote call"
   extends Modelica.Icons.Example;
   NumRPC.RCallPeriodic rCallPeriodic1(cmd = 2, nin = 2, period = 0.1)  annotation(
     Placement(visible = true, transformation(origin = {30, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -21,7 +21,7 @@ equation
     Line(points = {{-19, -50}, {-2, -50}, {-2, -50}, {15, -50}, {15, -50}, {16, -50}, {16, -50}, {17, -50}}, color = {0, 0, 127}, thickness = 0.5));
 
 annotation(
-    Diagram(graphics = {Text(origin = {-9, 88}, extent = {{-91, 12}, {109, -28}}, textString = "Test of a periodic remote call"), Text(origin = {29, 48}, extent = {{-109, 12}, {51, -8}}, textString = "needs a running NumRPC server
+    Diagram(graphics = {Text(origin = {-9, 88}, extent = {{-91, 12}, {109, -28}}, textString = "Test of a periodic remote call"), Text(origin = {29, 48}, extent = {{-109, 12}, {51, -12}}, textString = "needs a running NumRPC server
 which implements at cmd=2
-a function taking 2 arguments", textStyle = {TextStyle.Italic})}, coordinateSystem(initialScale = 0.1)));
+a function taking 2 arguments and returning 1\n (e.g. substract)", textStyle = {TextStyle.Italic})}, coordinateSystem(initialScale = 0.1)));
 end PeriodicCallTest;
