@@ -22,7 +22,7 @@ initial equation
   st_res = ST0;
   // Initialize state id:
   if state_use == StateUsage.int then
-    st =  numrpcConn.state_init(numrpcConn.client, cmd);
+    st = numrpcConn.state_init(numrpcConn.client, cmd);
   elseif state_use == StateUsage.ext then
     st = st_ext;
   else // state_use == StateUsage.none
