@@ -20,13 +20,12 @@ protected
 initial equation
   y = y0;
   st_res = ST0;
+  // Initialize state id:
   if state_use == StateUsage.int then
-    st = ST0;
-// TODO: call STI command
+    st =  numrpcConn.state_init(numrpcConn.client, cmd);
   elseif state_use == StateUsage.ext then
     st = st_ext;
-  else
-// state_use == StateUsage.none
+  else // state_use == StateUsage.none
     st = ST0;
   end if;
 

@@ -12,7 +12,9 @@
 #define RE_WNA  -2
 #define RE_DEC  -3
 #define RE_STI  -4
-#define RE_SES  -5
+#define RE_SNF  -5
+#define RE_FCF  -6
+#define RE_SES  -7
 
 typedef struct {
     int cmd; /*requested command id, or return code */
@@ -87,6 +89,9 @@ int recv_header(void* requester, header_t* header_p) {
     if (rcode == RE_FNF) ModelicaError("NumRPC server error: requested function code not found");
     if (rcode == RE_WNA) ModelicaError("NumRPC server error: wrong number of calling args");
     if (rcode == RE_DEC) ModelicaError("NumRPC server error: arg decoding error");
+    if (rcode == RE_STI) ModelicaError("NumRPC server error: state init error");
+    if (rcode == RE_SNF) ModelicaError("NumRPC server error: state not found");
+    if (rcode == RE_FCF) ModelicaError("NumRPC server error: function call failed");
     if (rcode != ROK) ModelicaFormatError("NumRPC server error of unknown kind: rcode=%d", rcode);
     
     return more;

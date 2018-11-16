@@ -34,10 +34,10 @@ block Connection "NumRPC block which holds the client connection"
   impure function state_init "initialize state for cmd command"
     input ZmqReqClient client;
     input Integer cmd;
-    output Integer st;
+    output Integer st_res;
     
   algorithm
-    (outputs,) := scall_no_io(client, cmd=STI, st=cmd);
+    st_res := scall_no_io(client, cmd=STI, st=cmd);
   end state_init;
 
 
